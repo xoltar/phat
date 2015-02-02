@@ -40,7 +40,7 @@
 
 
 enum Representation_type { VECTOR_VECTOR, VECTOR_HEAP, VECTOR_SET, SPARSE_PIVOT_COLUMN, HEAP_PIVOT_COLUMN, FULL_PIVOT_COLUMN, BIT_TREE_PIVOT_COLUMN, VECTOR_LIST };
-enum Algorithm_type  {STANDARD, TWIST, ROW, CHUNK, CHUNK_SEQUENTIAL, SPECTRAL_SEQUENCE};
+enum Algorithm_type  {STANDARD, TWIST, ROW, CHUNK, CHUNK_SEQUENTIAL, SPECTRAL_SEQUENCE, CHUNK_SQRT};
 enum Ansatz_type  {PRIMAL, DUAL};
 
 void print_help() {
@@ -87,6 +87,7 @@ void parse_command_line( int argc, char** argv, bool& latex_tables_output, bool&
             else if( argument == "--twist" ) algorithms.push_back( TWIST );
             else if( argument == "--row" ) algorithms.push_back( ROW );
             else if( argument == "--chunk_sequential" ) algorithms.push_back( CHUNK_SEQUENTIAL );
+            else if( argument == "--chunk_sqrt" ) algorithms.push_back( CHUNK_SQRT );
             else if( argument == "--spectral_sequence" ) algorithms.push_back( SPECTRAL_SEQUENCE );
             else if( argument == "--chunk" ) algorithms.push_back( CHUNK );
             else if( argument == "--primal" ) ansaetze.push_back( PRIMAL );
@@ -195,11 +196,12 @@ void benchmark_latex( std::string input_filename, bool use_binary, Ansatz_type a
     case TWIST: std::cout << " twist,"; benchmark< phat::Representation, phat::twist_reduction >( input_filename, use_binary, ansatz ); break; \
     case ROW: std::cout << " row,"; benchmark< phat::Representation, phat::row_reduction >( input_filename, use_binary, ansatz ); break; \
     case CHUNK: std::cout << " chunk,"; benchmark< phat::Representation, phat::chunk_reduction >( input_filename, use_binary, ansatz ); break; \
+    case CHUNK_SQRT: std::cout << " chunk_sqrt,"; benchmark< phat::Representation, phat::chunk_reduction_sqrt >( input_filename, use_binary, ansatz ); break; \
     case SPECTRAL_SEQUENCE: std::cout << " spectral sequence,"; benchmark< phat::Representation, phat::spectral_sequence_reduction >( input_filename, use_binary, ansatz ); break; \
     case CHUNK_SEQUENTIAL: std::cout << " chunk_sequential,"; \
                            int num_threads = omp_get_max_threads(); \
                            omp_set_num_threads( 1 ); \
-                           benchmark< phat::Representation, phat::chunk_reduction >( input_filename, use_binary, ansatz ); \
+                           benchmark< phat::Representation, phat::chunk_reduction_sqrt >( input_filename, use_binary, ansatz ); \
                            omp_set_num_threads( num_threads ); \
                            break; \
     };
@@ -210,10 +212,11 @@ void benchmark_latex( std::string input_filename, bool use_binary, Ansatz_type a
     case TWIST: benchmark_latex< phat::Representation, phat::twist_reduction >( input_filename, use_binary, ansatz ); break; \
     case ROW: benchmark_latex< phat::Representation, phat::row_reduction >( input_filename, use_binary, ansatz ); break; \
     case CHUNK: benchmark_latex< phat::Representation, phat::chunk_reduction >( input_filename, use_binary, ansatz ); break; \
+    case CHUNK_SQRT: benchmark_latex< phat::Representation, phat::chunk_reduction_sqrt >( input_filename, use_binary, ansatz ); break; \
     case SPECTRAL_SEQUENCE: benchmark_latex< phat::Representation, phat::spectral_sequence_reduction >( input_filename, use_binary, ansatz ); break; \
     case CHUNK_SEQUENTIAL:  int num_threads = omp_get_max_threads( ); \
                             omp_set_num_threads( 1 ); \
-                            benchmark_latex< phat::Representation, phat::chunk_reduction >( input_filename, use_binary, ansatz ); \
+                            benchmark_latex< phat::Representation, phat::chunk_reduction_sqrt >( input_filename, use_binary, ansatz ); \
                             omp_set_num_threads( num_threads ); \
                             break; \
     };
@@ -298,6 +301,7 @@ int main( int argc, char** argv )
                         case CHUNK: std::cout << "chunk"; break;
                         case SPECTRAL_SEQUENCE: std::cout << "spectral sequence"; break;
                         case CHUNK_SEQUENTIAL: std::cout << "chunk-sequential"; break;
+                        case CHUNK_SQRT: std::cout << "chunk-sqrt"; break;
                         }
                     } else {
                         switch( algorithm ) {
@@ -307,6 +311,7 @@ int main( int argc, char** argv )
                         case CHUNK: std::cout << "chunk$^*$"; break;
                         case SPECTRAL_SEQUENCE: std::cout << "spectral sequence$^*$"; break;
                         case CHUNK_SEQUENTIAL: std::cout << "chunk-sequential$^*$"; break;
+                        case CHUNK_SQRT: std::cout << "chunk-sqrt"; break;
                         }
                     }
                     std::cout << std::setw( 1 );
