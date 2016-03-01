@@ -105,6 +105,13 @@ void define_compute_persistence(py::module &mod,
             phat::compute_persistence_pairs<Reduction>(pairs, matrix);
             return pairs;
           });
+  mod.def((std::string("compute_persistence_pairs_dualized") +
+           representation_suffix +
+           std::string("_") + std::string(reduction_suffix)).c_str() , [](mat &matrix){
+            phat::persistence_pairs pairs;
+            phat::compute_persistence_pairs_dualized<Reduction>(pairs, matrix);
+            return pairs;
+          });
 }
 template<class T>
 void wrap_boundary_matrix(py::module &mod, const char * representation_suffix) {
