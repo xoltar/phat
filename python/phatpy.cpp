@@ -45,6 +45,12 @@ void define_compute_persistence(py::module &mod,
           });
 }
 
+template <typename SelfRep, typename OtherRep>
+void define_converter(py::module &mod, const std::string &self_suffix, const std::string &other_suffix) {
+  mod.def((std::string("convert_") + other_suffix + "_to_" + self_suffix).c_str(), [](phat::boundary_matrix<OtherRep> &other) {
+      return phat::boundary_matrix<SelfRep>(other);
+    });
+}
 
 template<class T>
 void wrap_boundary_matrix(py::module &mod, const std::string &representation_suffix) {
@@ -54,6 +60,8 @@ void wrap_boundary_matrix(py::module &mod, const std::string &representation_suf
   py::class_<mat>(mod, (std::string("boundary_matrix_") + representation_suffix).c_str())
     .def(py::init())
     .def("load_vector_vector", &mat::template load_vector_vector<phat::index, phat::dimension>)
+    .def("load_binary", &mat::load_binary)
+    .def("save_binary", &mat::save_binary)
     .def("load_ascii", &mat::load_ascii)
     .def("save_ascii", &mat::save_ascii)
     .def("get_dim", &mat::get_dim)
@@ -79,6 +87,14 @@ void wrap_boundary_matrix(py::module &mod, const std::string &representation_suf
   define_compute_persistence<phat::row_reduction, T>(mod, representation_suffix, std::string("rr"));
   define_compute_persistence<phat::twist_reduction, T>(mod, representation_suffix, std::string("tr"));
   define_compute_persistence<phat::spectral_sequence_reduction, T>(mod, representation_suffix, std::string("ssr"));
+  define_converter<T, phat::bit_tree_pivot_column>(mod, representation_suffix, std::string("btpc"));
+  define_converter<T, phat::sparse_pivot_column>(mod, representation_suffix, std::string("spc"));
+  define_converter<T, phat::heap_pivot_column>(mod, representation_suffix, std::string("hpc"));
+  define_converter<T, phat::full_pivot_column>(mod, representation_suffix, std::string("fpc"));
+  define_converter<T, phat::vector_vector>(mod, representation_suffix, std::string("vv"));
+  define_converter<T, phat::vector_heap>(mod, representation_suffix, std::string("vh"));
+  define_converter<T, phat::vector_set>(mod, representation_suffix, std:: string("vs"));
+  define_converter<T, phat::vector_list>(mod, representation_suffix, std::string("vl"));
 }
 
 PYBIND11_PLUGIN(_phat) {

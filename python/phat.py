@@ -26,32 +26,67 @@ representations = Namespace(bit_tree_pivot_column = object(),
                             vector_set = object(),
                             vector_list = object())
 
-reduction_algorithms = Namespace(twist_reduction = object())
+reductions = Namespace(twist_reduction = object(),
+                       chunk_reduction = object(),
+                       standard_reduction = object(),
+                       row_reduction = object(),
+                       spectral_sequence_reduction = object(),
+
+)
 
 def __short_name(name):
     return "".join([n[0] for n in name.split("_")])
 
-def boundary_matrix(representation = representations.bit_tree_pivot_column):
-    class_name = representations.get_name(representation)
+def convert(source, to_representation):
+    class_name = source.__class__.__name__
 
-    short_name = __short_name(class_name)
+    source_rep_short_name = class_name[len('boundary_matrix_'):]
 
-    function = getattr(_phat, "boundary_matrix_" + short_name)
+    to_rep_short_name = __short_name(representations.get_name(to_representation))
 
-    return function()
+    function = getattr(_phat, "convert_%s_to_%s" % (source_rep_short_name, to_rep_short_name))
+
+    return function(source)
+
+def boundary_matrix(representation = representations.bit_tree_pivot_column, source = None):
+    if source:
+        return convert(source, representation)
+    else:
+        class_name = representations.get_name(representation)
+
+        short_name = __short_name(class_name)
+
+        function = getattr(_phat, "boundary_matrix_" + short_name)
+
+        return function()
 
 def compute_persistence_pairs(matrix,
-                              reduction = reduction_algorithms.twist_reduction):
+                              reduction = reductions.twist_reduction):
 
     class_name = matrix.__class__.__name__
 
     representation_short_name = class_name[len('boundary_matrix_'):]
 
-    algo_name = reduction_algorithms.get_name(reduction)
+    algo_name = reductions.get_name(reduction)
 
     algo_short_name = __short_name(algo_name)
 
     function = getattr(_phat, "compute_persistence_pairs_" + representation_short_name + "_" + algo_short_name)
+
+    return function(matrix)
+
+def compute_persistence_pairs_dualized(matrix,
+                                       reduction = reductions.twist_reduction):
+
+    class_name = matrix.__class__.__name__
+
+    representation_short_name = class_name[len('boundary_matrix_'):]
+
+    algo_name = reductions.get_name(reduction)
+
+    algo_short_name = __short_name(algo_name)
+
+    function = getattr(_phat, "compute_persistence_pairs_dualized_" + representation_short_name + "_" + algo_short_name)
 
     return function(matrix)
 

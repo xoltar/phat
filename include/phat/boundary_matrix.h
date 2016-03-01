@@ -285,6 +285,7 @@ namespace phat {
         // Format: nr_columns % dim1 % N1 % row1 row2 % ...% rowN1 % dim2 % N2 % ...
         bool load_binary( std::string filename )
         {
+          std::cout << "Starting to read binary" << std::endl;
             std::ifstream input_stream( filename.c_str( ), std::ios_base::binary | std::ios_base::in );
             if( input_stream.fail( ) )
                 return false;
@@ -310,6 +311,7 @@ namespace phat {
             }
 
             input_stream.close( );
+            std::cout << "Read binary success" << std::endl;
             return true;
         }
 
