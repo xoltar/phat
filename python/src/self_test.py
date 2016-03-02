@@ -2,14 +2,14 @@ import sys
 import phat
 
 if __name__=='__main__':
-    test_data = (sys.argv and sys.argv[0]) or "../../examples/torus.bin"
+    test_data = (sys.argv[1:] and sys.argv[1]) or "../../examples/torus.bin"
 
     print("Reading test data %s in binary format ..." % test_data)
 
     boundary_matrix = phat.boundary_matrix()
     # This is broken for some reason
-    # if not boundary_matrix.load_binary(test_data):
-    if not boundary_matrix.load_ascii(test_data):
+    if not boundary_matrix.load_binary(test_data):
+    # if not boundary_matrix.load_ascii(test_data):
         print("Error: test data %s not found!" % test_data)
         sys.exit(1)
 
