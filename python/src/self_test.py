@@ -147,23 +147,22 @@ if __name__=='__main__':
     else:
         print("All results are identical (as they should be)")
 
-    # print("Testing vector<vector> interface ...")
+    print("Testing vector<vector> interface ...")
 
-    
-    #     std::vector< std::vector< int > > vector_vector_matrix
-    #     std::vector< int > vector_dims
-    #     boundary_matrix.save_vector_vector( vector_vector_matrix, vector_dims )
-    #     phat.boundary_matrix< BitTree > vector_vector_boundary_matrix
-    #     vector_vector_boundary_matrix.load_vector_vector( vector_vector_matrix, vector_dims )
+    (vector_vector_matrix, vector_dims) = boundary_matrix.get_vector_vector()
 
-    #     if vector_vector_boundary_matrix != boundary_matrix:
-    #         print("Error: [load|save]_vector_vector bug", file=sys.stderr)
-    #         error = True
-        
+    vector_vector_boundary_matrix = phat.boundary_matrix(phat.representations.bit_tree_pivot_column)
 
-    #     if error ) return EXIT_FAILURE
-    #     else print("Test passed!"
-    
+    vector_vector_boundary_matrix.load_vector_vector(vector_vector_matrix, vector_dims)
 
-    # return EXIT_SUCCESS
+    if vector_vector_boundary_matrix != boundary_matrix:
+        print("Error: [load|save]_vector_vector bug", file=sys.stderr)
+        error = True
+
+
+    if error:
+        sys.exit(1)
+    else:
+        print("Test passed!")
+
 

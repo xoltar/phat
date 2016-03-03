@@ -60,6 +60,12 @@ void wrap_boundary_matrix(py::module &mod, const std::string &representation_suf
   py::class_<mat>(mod, (std::string("boundary_matrix_") + representation_suffix).c_str())
     .def(py::init())
     .def("load_vector_vector", &mat::template load_vector_vector<phat::index, phat::dimension>)
+    .def("get_vector_vector", [](mat &m) {
+        std::vector< std::vector< int > > vector_vector_matrix;
+        std::vector< int > vector_dims;
+        m.save_vector_vector( vector_vector_matrix, vector_dims );
+        return std::tuple<std::vector<std::vector<int>>, std::vector<int>>(vector_vector_matrix, vector_dims);
+      })
     .def("load_binary", &mat::load_binary)
     .def("save_binary", &mat::save_binary)
     .def("load_ascii", &mat::load_ascii)
@@ -72,6 +78,14 @@ void wrap_boundary_matrix(py::module &mod, const std::string &representation_suf
           m.set_dim(i, dims[i]);
         }
       })
+    .def("__eq__", &mat::template operator==<phat::bit_tree_pivot_column>)
+    .def("__eq__", &mat::template operator==<phat::sparse_pivot_column>)
+    .def("__eq__", &mat::template operator==<phat::heap_pivot_column>)
+    .def("__eq__", &mat::template operator==<phat::full_pivot_column>)
+    .def("__eq__", &mat::template operator==<phat::vector_vector>)
+    .def("__eq__", &mat::template operator==<phat::vector_heap>)
+    .def("__eq__", &mat::template operator==<phat::vector_set>)
+    .def("__eq__", &mat::template operator==<phat::vector_list>)
     .def("is_empty", &mat::is_empty)
     .def("get_col", [](mat &m, phat::index col_index) {
         std::vector<phat::index> col;
