@@ -74,7 +74,7 @@ void wrap_boundary_matrix(py::module &mod, const std::string &representation_suf
     .def("set_dim", &mat::set_dim)
     .def("set_dims", [](mat &m, std::vector<phat::index> dims) {
         m.set_num_cols(dims.size());
-        for(int i = 0; i < dims.size(); i++) {
+        for(size_t i = 0; i < dims.size(); i++) {
           m.set_dim(i, dims[i]);
         }
       })
@@ -111,6 +111,20 @@ void wrap_boundary_matrix(py::module &mod, const std::string &representation_suf
   define_converter<T, phat::vector_list>(mod, representation_suffix, std::string("vl"));
 }
 
+phat::index fix_index(const phat::persistence_pairs &p, int index) {
+  //Note get_num_pairs returns type index, which is not unsigned, though it comes from
+  //std::vector.size, which is size_t.
+  phat::index pairs = p.get_num_pairs();
+  assert(pairs > 0);
+  if (index < 0) {
+    index = pairs + index;
+  }
+  if ((index < 0) || static_cast<size_t>(index) >= static_cast<size_t>(pairs)) {
+    throw py::index_error();
+  }
+  return index;
+}
+
 PYBIND11_PLUGIN(_phat) {
   py::module m("_phat", "pybind11 example plugin");
 
@@ -121,16 +135,12 @@ PYBIND11_PLUGIN(_phat) {
     .def("set_pair", &phat::persistence_pairs::set_pair)
     .def("__setitem__",
          [](phat::persistence_pairs &p, int index, std::pair<phat::index,phat::index> &pair) {
-           if (index >= p.get_num_pairs()) {
-             throw py::index_error();
-           }
-           p.set_pair(index, pair.first, pair.second);
+           phat::index idx = fix_index(p, index);
+           p.set_pair(idx, pair.first, pair.second);
          })
-    .def("__getitem__", [](const phat::persistence_pairs &p, size_t index) {
-        if (index >= p.get_num_pairs()) {
-          throw py::index_error();
-        }
-        return p.get_pair(index);
+    .def("__getitem__", [](const phat::persistence_pairs &p, int index) {
+        phat::index idx = fix_index(p, index);
+        return p.get_pair(idx);
       })
     .def("clear", &phat::persistence_pairs::clear)
     .def("load_ascii", &phat::persistence_pairs::load_ascii)
@@ -150,7 +160,6 @@ PYBIND11_PLUGIN(_phat) {
   wrap_boundary_matrix<phat::vector_set>(m, "vs");
   wrap_boundary_matrix<phat::vector_list>(m, "vl");
 
-  using mat = phat::boundary_matrix<phat::bit_tree_pivot_column>;
   return m.ptr();
 
 }
