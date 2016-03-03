@@ -1,16 +1,21 @@
 from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 import sys
-
+import os.path
 ext_modules = [
     Extension(
         '_phat',
         ['phatpy.cpp'],
-        include_dirs=['include', '../include', 'pybind11/include'],
+        include_dirs=['include', '../include'],
         language='c++',
     ),
 ]
 
+here = os.path.abspath(os.path.dirname(__file__))
+
+# Get the long description from the README file
+with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+    long_description = f.read()
 
 class BuildExt(build_ext):
     """A custom build extension for adding compiler-specific options."""
@@ -38,11 +43,15 @@ setup(
     description='Python bindings for PHAT',
     license = 'LGPL',
     keywords='algebraic-topology PHAT distributed topology persistent-homology',
-    long_description='',
+    long_description=long_description,
     ext_modules=ext_modules,
     install_requires=['pybind11'],
     cmdclass={'build_ext': BuildExt},
     py_modules = ['phat']
     # packages = find_packages(exclude = ['doc', 'test'])
  )
+
+
+
+
 
