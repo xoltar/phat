@@ -5,7 +5,7 @@ import os.path
 ext_modules = [
     Extension(
         '_phat',
-        ['phatpy.cpp'],
+        ['_phat.cpp'],
         include_dirs=['include', '../include'],
         language='c++',
     ),
