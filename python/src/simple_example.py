@@ -20,7 +20,6 @@ if __name__ == "__main__":
 """)
 
     import phat
-    import numpy as np
 
     # set the dimension of the cell that each column represents:
     dimensions = [0, 0, 1, 0, 1, 1, 2]
@@ -42,7 +41,7 @@ if __name__ == "__main__":
     print()
     print("The boundary matrix has %d columns:" % boundary_matrix.get_num_cols())
     for col_idx in range(boundary_matrix.get_num_cols()):
-        s = "Colum %d represents a cell of dimension %d." % (col_idx, boundary_matrix.get_dim(col_idx))
+        s = "Column %d represents a cell of dimension %d." % (col_idx, boundary_matrix.get_dim(col_idx))
         if (not boundary_matrix.is_empty(col_idx)):
             s = s + " Its boundary consists of the cells " + " ".join([str(c) for c in boundary_matrix.get_col(col_idx)])
         print(s)
@@ -58,17 +57,3 @@ if __name__ == "__main__":
     for pair in pairs:
         print("Birth: %d, Death: %d" % pair)
 
-"""
-
-# wrapper algorithm that computes the persistence pairs of a given boundary matrix using a specified algorithm
-#include <phat/compute_persistence_pairs.h>
-
-# main data structure (choice affects performance)
-#include <phat/representations/vector_vector.h>
-
-# algorithm (choice affects performance)
-#include <phat/algorithms/standard_reduction.h>
-#include <phat/algorithms/chunk_reduction.h>
-#include <phat/algorithms/row_reduction.h>
-#include <phat/algorithms/twist_reduction.h>
-""" 
