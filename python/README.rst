@@ -39,10 +39,9 @@ the algorithm. We provide the following choices of representation classes:
   * `full_pivot_column`: The same idea as in the sparse version. However, instead of a `std::set`, the pivot column is expanded into a bit vector of size n (the dimension of the matrix). To avoid costly initializations, the class remembers which entries have been manipulated for a pivot column and updates only those entries when another column becomes the pivot.
   * `bit_tree_pivot_column` (default representation): Similar to the `full_pivot_column` but the implementation is more efficient. Internally it is a bit-set with fast iteration over nonzero elements, and fast access to the maximal element. 
 
-Sample usage:
+Sample usage::
 -------------
 
-::
     print("""
     we will build an ordered boundary matrix of this simplicial complex consisting of a single triangle: 
     
