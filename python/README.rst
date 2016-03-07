@@ -2,16 +2,16 @@ Persistent Homology Algorithm Toolkit (PHAT)
 ============================================
 
 This software library contains methods for computing the persistence pairs of a 
-filtered cell complex represented by an ordered boundary matrix with Z\ :sub:``2``\ coefficients.
+filtered cell complex represented by an ordered boundary matrix with Z\ :sub:``2``\  coefficients.
 
-For an introduction to persistent homology, see the textbook ``[1]``. This software package
+For an introduction to persistent homology, see the textbook [1]_. This software package
 contains code for several algorithmic variants:
 
-  * The "standard" algorithm (see ``[1]``, p.153)
-  * The "row" algorithm from ``[2]`` (called pHrow in that paper)
-  * The "twist" algorithm, as described in ``[3]`` (default algorithm)
-  * The "chunk" algorithm presented in ``[4]`` 
-  * The "spectral sequence" algorithm (see ``[1]``, p.166)
+* The "standard" algorithm (see [1]_, p.153)
+* The "row" algorithm from [2]_ (called pHrow in that paper)
+* The "twist" algorithm, as described in [3]_ (default algorithm)
+* The "chunk" algorithm presented in [4]_ 
+* The "spectral sequence" algorithm (see [1]_, p.166)
 
 All but the standard algorithm exploit the special structure of the boundary matrix
 to take shortcuts in the computation. The chunk and the spectral sequence algorithms
@@ -39,8 +39,8 @@ the algorithm. We provide the following choices of representation classes:
 * ``full_pivot_column``: The same idea as in the sparse version. However, instead of a ``std::set``, the pivot column is expanded into a bit vector of size n (the dimension of the matrix). To avoid costly initializations, the class remembers which entries have been manipulated for a pivot column and updates only those entries when another column becomes the pivot.
 * ``bit_tree_pivot_column`` (default representation): Similar to the ``full_pivot_column`` but the implementation is more efficient. Internally it is a bit-set with fast iteration over nonzero elements, and fast access to the maximal element. 
 
-Sample usage::
--------------
+Sample usage
+------------
 
 From src/simple_example.py in the source::
 
@@ -101,7 +101,8 @@ From src/simple_example.py in the source::
 
 References:
 
-1. H.Edelsbrunner, J.Harer: Computational Topology, An Introduction. American Mathematical Society, 2010, ISBN 0-8218-4925-5
-2. V.de Silva, D.Morozov, M.Vejdemo-Johansson: Dualities in persistent (co)homology. Inverse Problems 27, 2011
-3. C.Chen, M.Kerber: Persistent Homology Computation With a Twist. 27th European Workshop on Computational Geometry, 2011.
-4. U.Bauer, M.Kerber, J.Reininghaus: Clear and Compress: Computing Persistent Homology in Chunks. [http://arxiv.org/pdf/1303.0477.pdf arXiv:1303.0477]
+.. [1] H.Edelsbrunner, J.Harer: Computational Topology, An Introduction. American Mathematical Society, 2010, ISBN 0-8218-4925-5
+.. [2] V.de Silva, D.Morozov, M.Vejdemo-Johansson: Dualities in persistent (co)homology. Inverse Problems 27, 2011
+.. [3] C.Chen, M.Kerber: Persistent Homology Computation With a Twist. 27th European Workshop on Computational Geometry, 2011.
+.. [4] U.Bauer, M.Kerber, J.Reininghaus: Clear and Compress: Computing Persistent Homology in Chunks. arXiv:1303.0477_
+.. _arXiv:1303.0477: http://arxiv.org/pdf/1303.0477.pdf
