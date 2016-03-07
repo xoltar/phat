@@ -2,7 +2,7 @@ Persistent Homology Algorithm Toolkit (PHAT)
 ============================================
 
 This software library contains methods for computing the persistence pairs of a 
-filtered cell complex represented by an ordered boundary matrix with Z\ :sub:``2``\  coefficients.
+filtered cell complex represented by an ordered boundary matrix with Z\ :sub:`2` coefficients.
 
 For an introduction to persistent homology, see the textbook [1]_. This software package
 contains code for several algorithmic variants:
