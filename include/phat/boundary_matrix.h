@@ -68,7 +68,7 @@ namespace phat {
         // finalizes given column
         void finalize( index idx ) { rep._finalize( idx ); }
         
-        // syncronizes all internal data structures -- has to be called before and after any multithreaded access!
+        // synchronizes all internal data structures -- has to be called before and after any multithreaded access!
         void sync() { rep._sync(); }
 
     // info functions -- independent of chosen 'Representation'
@@ -283,12 +283,16 @@ namespace phat {
 
         // Loads boundary_matrix from given file 
         // Format: nr_columns % dim1 % N1 % row1 row2 % ...% rowN1 % dim2 % N2 % ...
-        bool load_binary( std::string filename )
+        bool load_binary(const std::string &filename )
         {
             std::ifstream input_stream( filename.c_str( ), std::ios_base::binary | std::ios_base::in );
             if( input_stream.fail( ) )
                 return false;
 
+            //TODO Note that if you read a file that isn't actually a data file, you may get
+            //a number of columns that is bigger than the available memory, which leads to crashes
+            //with deeply confusing error messages. Consider ways to prevent this.
+            //Magic number in the file header? Check for more columns than bytes in the file?
             int64_t nr_columns;
             input_stream.read( (char*)&nr_columns, sizeof( int64_t ) );
             this->set_num_cols( (index)nr_columns );

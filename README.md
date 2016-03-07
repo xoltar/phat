@@ -7,7 +7,7 @@ Ulrich Bauer, Michael Kerber, Jan Reininghaus
 
 ## Contributors: ##
 
-Hubert Wagner
+Hubert Wagner, Bryn Keller
 
 ## Downloads: ##
 * [PHAT, v1.4.0](https://drive.google.com/uc?id=0B7Yz6TPEpiGEWmNyeVFsNXgtUGc&export=download)

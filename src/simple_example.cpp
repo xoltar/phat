@@ -96,7 +96,7 @@ int main( int argc, char** argv )
     std::cout << std::endl;
     std::cout << "The boundary matrix has " << boundary_matrix.get_num_cols() << " columns: " << std::endl;
     for( phat::index col_idx = 0; col_idx < boundary_matrix.get_num_cols(); col_idx++ ) {
-        std::cout << "Colum " << col_idx << " represents a cell of dimension " << (int)boundary_matrix.get_dim( col_idx ) << ". ";
+        std::cout << "Column " << col_idx << " represents a cell of dimension " << (int)boundary_matrix.get_dim( col_idx ) << ". ";
         if( !boundary_matrix.is_empty( col_idx ) ) {
             std::vector< phat::index > temp_col;
             boundary_matrix.get_col( col_idx, temp_col ); 
