@@ -47,7 +47,7 @@ setup(
     ext_modules=ext_modules,
     install_requires=['pybind11'],
     cmdclass={'build_ext': BuildExt},
-    py_modules = ['phat']
+    py_modules = ['phat'],
     # packages = find_packages(exclude = ['doc', 'test'])
  )
 
