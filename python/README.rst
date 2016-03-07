@@ -1,7 +1,8 @@
 Persistent Homology Algorithm Toolkit (PHAT)
 ============================================
 
-This software library contains methods for computing the persistence pairs of a 
+This is a Python interface for the `Persistent Homology Algorithm Toolkit`_, a software library
+that contains methods for computing the persistence pairs of a 
 filtered cell complex represented by an ordered boundary matrix with Z\ :sub:`2` coefficients.
 
 For an introduction to persistent homology, see the textbook [1]_. This software package
@@ -106,3 +107,4 @@ References:
 .. [3] C.Chen, M.Kerber: Persistent Homology Computation With a Twist. 27th European Workshop on Computational Geometry, 2011.
 .. [4] U.Bauer, M.Kerber, J.Reininghaus: Clear and Compress: Computing Persistent Homology in Chunks. arXiv:1303.0477_
 .. _arXiv:1303.0477: http://arxiv.org/pdf/1303.0477.pdf
+.. _`Persistent Homology Algorithm Toolkit`: https://bitbucket.org/phat/phat-code

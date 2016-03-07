@@ -38,7 +38,7 @@ setup(
     name='phat',
     version='0.0.1',
     author='Bryn Keller',
-    author_email='xoltar@xoltar.org',
+    author_email='bryn.keller@intel.com',
     url='https://bitbucket.org/phat-code/phat',
     description='Python bindings for PHAT',
     license = 'LGPL',
