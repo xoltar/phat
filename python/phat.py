@@ -67,7 +67,7 @@ class boundary_matrix:
         """
         self._representation = representation
         if source:
-            self._matrix = convert(source)
+            self._matrix = _convert(source)
         else:
             self._matrix = self.__matrix_for_representation(representation)()
 
@@ -134,13 +134,39 @@ class boundary_matrix:
         """Sets the dimension at the given index"""
         return self._matrix.set_dim(index, dimension)
 
+    def compute_persistence_pairs(self,
+                                reduction = reductions.twist_reduction):
+        """Computes persistence pairs (birth, death) for the given boundary matrix."""
+        representation_short_name = _short_name(self._representation.name)
+        algo_name = reduction.name
+        algo_short_name = _short_name(algo_name)
+        #Look up an implementation that matches the requested characteristics
+        #in the _phat module
+        function = getattr(_phat, "compute_persistence_pairs_" + representation_short_name + "_" + algo_short_name)
+        return function(self._matrix)
+
+    def compute_persistence_pairs_dualized(self, 
+                                        reduction = reductions.twist_reduction):
+        """Computes persistence pairs (birth, death) from the dualized form of the given boundary matrix."""
+        representation_short_name = _short_name(self._representation.name)
+        algo_name = reduction.name
+        algo_short_name = _short_name(algo_name)
+        #Look up an implementation that matches the requested characteristics
+        #in the _phat module
+        function = getattr(_phat, "compute_persistence_pairs_dualized_" + representation_short_name + "_" + algo_short_name)
+        return function(self._matrix)
+
+    def convert(self, representation):
+        """Copy this matrix to another with a different representation"""
+        return boundary_matrix(representation, self)
+
 def _short_name(name):
     """An internal API that takes leading characters from words
     For instance, 'bit_tree_pivot_column' becomes 'btpc'
     """
     return "".join([n[0] for n in name.split("_")])
 
-def convert(source, to_representation):
+def _convert(source, to_representation):
     """Internal - function to convert from one `boundary_matrix` implementation to another"""
     class_name = source.__class__.__name__
     source_rep_short_name = class_name[len('boundary_matrix_'):]
@@ -149,28 +175,6 @@ def convert(source, to_representation):
     return function(source)
 
 
-def compute_persistence_pairs(matrix,
-                              reduction = reductions.twist_reduction):
-    """Computes persistence pairs (birth, death) for the given boundary matrix."""
-    class_name = matrix.__class__.__name__
-    representation_short_name = _short_name(matrix._representation.name)
-    algo_name = reduction.name
-    algo_short_name = _short_name(algo_name)
-    #Look up an implementation that matches the requested characteristics
-    #in the _phat module
-    function = getattr(_phat, "compute_persistence_pairs_" + representation_short_name + "_" + algo_short_name)
-    return function(matrix._matrix)
-
-def compute_persistence_pairs_dualized(matrix,
-                                       reduction = reductions.twist_reduction):
-    """Computes persistence pairs (birth, death) from the dualized form of the given boundary matrix."""
-    representation_short_name = _short_name(matrix._representation.name)
-    algo_name = reduction.name
-    algo_short_name = _short_name(algo_name)
-    #Look up an implementation that matches the requested characteristics
-    #in the _phat module
-    function = getattr(_phat, "compute_persistence_pairs_dualized_" + representation_short_name + "_" + algo_short_name)
-    return function(matrix._matrix)
 
 
 

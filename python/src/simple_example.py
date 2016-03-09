@@ -47,7 +47,7 @@ if __name__ == "__main__":
         print(s)
     print("Overall, the boundary matrix has %d entries." % boundary_matrix.get_num_entries())
 
-    pairs = phat.compute_persistence_pairs(boundary_matrix)
+    pairs = boundary_matrix.compute_persistence_pairs()
 
     pairs.sort()
 
