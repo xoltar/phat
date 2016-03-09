@@ -119,8 +119,7 @@ void wrap_boundary_matrix(py::module &mod, const std::string &representation_suf
     //Note that boundary_matrix dimensions are not normal matrix dimensions,
     //They refer to the dimension of the simplex stored in the given column.
     .def("get_dim", &mat::get_dim,
-         "Get the dimension list for this boundary matrix. "
-         "The dimension list shows the dimension for each column in the matrix")
+         "Get the dimension for the requested column.")
     .def("set_dim", &mat::set_dim, "Set the dimension for a single column",
          py::arg("index"), py::arg("dimension"))
     //The `set_dims` method is an example of making the data structure easier to use

@@ -26,24 +26,25 @@ if __name__ == "__main__":
 
     # define a boundary matrix with the chosen internal representation
     boundary_matrix = phat.boundary_matrix(representation = phat.representations.vector_vector)
+    boundary_matrix.dimensions = dimensions
 
     # set the respective columns -- the columns entries have to be sorted
-    boundary_matrix.set_dims(dimensions)
-    boundary_matrix.set_col(0, [])
-    boundary_matrix.set_col(1, [])
-    boundary_matrix.set_col(2, [0,1])
-    boundary_matrix.set_col(3, [])
-    boundary_matrix.set_col(4, [1,3])
-    boundary_matrix.set_col(5, [0,3])
-    boundary_matrix.set_col(6, [2,4,5])
+    boundary_matrix.columns[0].values = []
+    boundary_matrix.columns[1].values = []
+    boundary_matrix.columns[2].values = [0,1]
+    boundary_matrix.columns[3].values = []
+    boundary_matrix.columns[4].values = [1,3]
+    boundary_matrix.columns[5].values = [0,3]
+    boundary_matrix.columns[6].values = [2,4,5]
+
 
     # print some information of the boundary matrix:
     print()
-    print("The boundary matrix has %d columns:" % boundary_matrix.get_num_cols())
-    for col_idx in range(boundary_matrix.get_num_cols()):
-        s = "Column %d represents a cell of dimension %d." % (col_idx, boundary_matrix.get_dim(col_idx))
-        if (not boundary_matrix.is_empty(col_idx)):
-            s = s + " Its boundary consists of the cells " + " ".join([str(c) for c in boundary_matrix.get_col(col_idx)])
+    print("The boundary matrix has %d columns:" % len(boundary_matrix.dimensions))
+    for col in boundary_matrix.columns:
+        s = "Column %d represents a cell of dimension %d." % (col.index, col.dimension)
+        if (col.values):
+            s = s + " Its boundary consists of the cells " + " ".join([str(c) for c in col.values])
         print(s)
     print("Overall, the boundary matrix has %d entries." % boundary_matrix.get_num_entries())
 

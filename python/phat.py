@@ -39,6 +39,31 @@ class reductions(enum.Enum):
     row_reduction = 4
     spectral_sequence_reduction = 5
 
+class column:
+    def __init__(self, matrix, index):
+        self._matrix = matrix
+        self._index = index
+
+    @property
+    def index(self):
+        return self._index
+
+    @property
+    def dimension(self):
+        return self._matrix.get_dim(self._index)
+
+    @dimension.setter
+    def dimension(self, value):
+        return self._matrix.set_dim(self._index, value)
+
+    @property
+    def values(self):
+        return self._matrix.get_col(self._index)
+
+    @values.setter
+    def values(self, values):
+        return self._matrix.set_col(self._index, values)
+
 class boundary_matrix:
     """Boundary matrices that store the shape information of a cell complex.
     """
@@ -71,6 +96,18 @@ class boundary_matrix:
         else:
             self._matrix = self.__matrix_for_representation(representation)()
 
+    @property
+    def columns(self):
+        return [column(self, i) for i in range(self.get_num_cols())]
+
+    @property
+    def dimensions(self):
+        return [self.get_dim(i) for i in range(self.get_num_cols())]
+
+    @dimensions.setter
+    def dimensions(self, dimensions):
+        return self.set_dims(dimensions)
+
     def __matrix_for_representation(self, representation):
         short_name = _short_name(representation.name)
         return getattr(_phat, "boundary_matrix_" + short_name)
@@ -83,7 +120,7 @@ class boundary_matrix:
         return self._matrix.get_col(index)
 
     def get_dim(self, index):
-        """Returns the dimension for the requested column"""
+        """Returns the requested dimension"""
         return self._matrix.get_dim(index)
 
     def get_num_cols(self):
