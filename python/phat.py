@@ -4,6 +4,58 @@ PHAT is a tool for algebraic topology. It can be used via phat.py to compute
 persistent (co)homology from boundary matrices, using various reduction
 algorithms and column data representations.
 
+Here is a simple example of usage.
+
+We will build an ordered boundary matrix of this simplicial complex consisting of a single triangle: 
+
+     3
+     |\\
+     | \\
+     |  \\
+     |   \\ 4
+    5|    \\
+     |     \\
+     |  6   \\
+     |       \\
+     |________\\
+     0    2    1
+
+Now the code::
+
+    import phat
+
+    # define a boundary matrix with the chosen internal representation
+    boundary_matrix = phat.boundary_matrix(representation = phat.representations.vector_vector)
+
+    # set the respective columns -- (dimension, boundary) pairs
+    boundary_matrix.columns = [ (0, []),
+                                (0, []),
+                                (1, [0,1]),
+                                (0, []),
+                                (1, [1,3]),
+                                (1, [0,3]),
+                                (2, [2,4,5])]
+
+    # or equivalently, boundary_matrix = phat.boundary_matrix(representation = ..., columns = ...)
+    # would combine the creation of the matrix and the assignment of the columns
+
+    # print some information of the boundary matrix:
+    print("\nThe boundary matrix has %d columns:" % len(boundary_matrix.columns))
+    for col in boundary_matrix.columns:
+        s = "Column %d represents a cell of dimension %d." % (col.index, col.dimension)
+        if (col.boundary):
+            s = s + " Its boundary consists of the cells " + " ".join([str(c) for c in col.boundary])
+        print(s)
+    print("Overall, the boundary matrix has %d entries." % len(boundary_matrix))
+
+    pairs = boundary_matrix.compute_persistence_pairs()
+
+    pairs.sort()
+
+    print("\nThere are %d persistence pairs: " % len(pairs))
+    for pair in pairs:
+        print("Birth: %d, Death: %d" % pair)
+
 Please see https://bitbucket.org/phat-code/phat/python for more information.
 """
 
@@ -16,8 +68,8 @@ from _phat import persistence_pairs
 
 __all__ = ['boundary_matrix',
            'persistence_pairs',
-           'compute_persistence_pairs',
-           'compute_persistence_pairs_dualized']
+           'representations',
+           'reductions']
 
 class representations(enum.Enum):
     """Available representations for internal storage of columns in
@@ -40,16 +92,21 @@ class reductions(enum.Enum):
     spectral_sequence_reduction = 5
 
 class column:
+    """A view on one column of data in a boundary matrix"""
     def __init__(self, matrix, index):
+        """INTERNAL. Columns are created automatically by boundary matrices.
+        There is no need to construct them directly"""
         self._matrix = matrix
         self._index = index
 
     @property
     def index(self):
+        """The 0-based index of this column in its boundary matrix"""
         return self._index
 
     @property
     def dimension(self):
+        """The dimension of the column (0 = point, 1 = line, 2 = triangle, etc.)"""
         return self._matrix._matrix.get_dim(self._index)
 
     @dimension.setter
@@ -58,6 +115,7 @@ class column:
 
     @property
     def boundary(self):
+        """The boundary values in this column, i.e. the other columns that this column is bounded by"""
         return self._matrix._matrix.get_col(self._index)
 
     @boundary.setter
@@ -83,12 +141,14 @@ class boundary_matrix:
         source : phat.boundary_matrix, optional
             If provided, creates the requested matrix as a copy of the data and dimensions
             in `source`.
+        columns : column list, or list of (dimension, boundary) tuples, optional
+            If provided, loads these columns into the new boundary matrix. Note that
+            columns will be loaded in the order given, not according to their ``index`` properties.
 
         Returns
         -------
 
         matrix : boundary_matrix
-            An instance of a class that satisfies the boundary matrix protocol.
         """
         self._representation = representation
         if source:
@@ -100,6 +160,7 @@ class boundary_matrix:
 
     @property
     def columns(self):
+        """A collection of column objects"""
         return [column(self, i) for i in range(self._matrix.get_num_cols())]
 
     @columns.setter
@@ -120,6 +181,7 @@ class boundary_matrix:
 
     @property
     def dimensions(self):
+        """A collection of dimensions, equivalent to [c.dimension for c in self.columns]"""
         return [self.get_dim(i) for i in range(self._matrix.get_num_cols())]
 
     @dimensions.setter
@@ -149,18 +211,54 @@ class boundary_matrix:
         self._matrix.set_vector_vector(dimensions, columns)
 
     def load(self, file_name, mode = 'b'):
-        """Load this boundary matrix from a file"""
+        """Load this boundary matrix from a file
+
+        Parameters
+        ----------
+
+        file_name : string
+            The file name to load
+
+        mode : string, optional (defaults to 'b')
+            The mode ('b' for binary, 't' for text) to use for working with the file
+
+        Returns
+        -------
+
+        success : bool
+
+        """
         if mode == 'b':
             return self._matrix.load_binary(file_name)
         elif mode == 't':
             return self._matrix.load_ascii(file_name)
+        else:
+            raise ValueError("Only 'b' - binary and 't' - text modes are supported")
 
     def save(self, file_name, mode = 'b'):
-        """Save this boundary matrix to a file"""
+        """Save this boundary matrix to a file
+
+        Parameters
+        ----------
+
+        file_name : string
+            The file name to load
+
+        mode : string, optional (defaults to 'b')
+            The mode ('b' for binary, 't' for text) to use for working with the file
+
+        Returns
+        -------
+
+        success : bool
+
+        """
         if mode == 'b':
             return self._matrix.save_binary(file_name)
         elif mode == 't':
             return self._matrix.save_ascii(file_name)
+        else:
+            raise ValueError("Only 'b' - binary and 't' - text modes are supported")
 
     def compute_persistence_pairs(self,
                                 reduction = reductions.twist_reduction):
