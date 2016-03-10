@@ -50,25 +50,25 @@ class column:
 
     @property
     def dimension(self):
-        return self._matrix.get_dim(self._index)
+        return self._matrix._matrix.get_dim(self._index)
 
     @dimension.setter
     def dimension(self, value):
-        return self._matrix.set_dim(self._index, value)
+        return self._matrix._matrix.set_dim(self._index, value)
 
     @property
-    def values(self):
-        return self._matrix.get_col(self._index)
+    def boundary(self):
+        return self._matrix._matrix.get_col(self._index)
 
-    @values.setter
-    def values(self, values):
-        return self._matrix.set_col(self._index, values)
+    @boundary.setter
+    def boundary(self, values):
+        return self._matrix._matrix.set_col(self._index, values)
 
 class boundary_matrix:
     """Boundary matrices that store the shape information of a cell complex.
     """
 
-    def __init__(self, representation = representations.bit_tree_pivot_column, source = None):
+    def __init__(self, representation = representations.bit_tree_pivot_column, source = None, columns = None):
         """
         The boundary matrix will use the specified implementation for storing its
         column data. If the `source` parameter is specified, it will be assumed to
@@ -92,21 +92,39 @@ class boundary_matrix:
         """
         self._representation = representation
         if source:
-            self._matrix = _convert(source)
+            self._matrix = _convert(source, representation)
         else:
             self._matrix = self.__matrix_for_representation(representation)()
+            if columns:
+                self.columns = columns
 
     @property
     def columns(self):
-        return [column(self, i) for i in range(self.get_num_cols())]
+        return [column(self, i) for i in range(self._matrix.get_num_cols())]
+
+    @columns.setter
+    def columns(self, columns):
+        for col in columns:
+           if not (isinstance(col, column) or isinstance(col, tuple)):
+               raise TypeError("All columns must be column objects, or (dimension, values) tuples")
+        if len(columns) != len(self.dimensions):
+            self._matrix.set_dims([0] * len(columns))
+        for i, col in enumerate(columns):
+            if isinstance(col, column):
+                self._matrix.set_dim(i, col.dimension)
+                self._matrix.set_col(i, col.boundary)
+            else:
+                dimension, values = col
+                self._matrix.set_dim(i, dimension)
+                self._matrix.set_col(i, values)
 
     @property
     def dimensions(self):
-        return [self.get_dim(i) for i in range(self.get_num_cols())]
+        return [self.get_dim(i) for i in range(self._matrix.get_num_cols())]
 
     @dimensions.setter
     def dimensions(self, dimensions):
-        return self.set_dims(dimensions)
+        return self._matrix.set_dims(dimensions)
 
     def __matrix_for_representation(self, representation):
         short_name = _short_name(representation.name)
@@ -115,61 +133,34 @@ class boundary_matrix:
     def __eq__(self, other):
         return self._matrix == other._matrix
 
-    def get_col(self, index):
-        """Returns the column at the requested index"""
-        return self._matrix.get_col(index)
-
-    def get_dim(self, index):
-        """Returns the requested dimension"""
-        return self._matrix.get_dim(index)
-
-    def get_num_cols(self):
-        """Returns the number of columns in the boundary matrix"""
-        return self._matrix.get_num_cols()
-
-    def get_num_entries(self):
-        """Returns the number of entries in the boundary matrix"""
+    def __len__(self):
         return self._matrix.get_num_entries()
 
-    def get_vector_vector(self):
-        """Returns the contents of the boundary matrix"""
-        return self._matrix.get_vector_vector()
+    #Pickle support
+    def __getstate__(self):
+        (dimensions, columns) = self._matrix.get_vector_vector()
+        return (self._representation, dimensions, columns)
 
-    def is_empty(self, index):
-        """Is the given column empty?"""
-        return self._matrix.is_empty(index)
+    #Pickle support
+    def __setstate__(self, state):
+        presentation, dimensions, columns = state
+        self._representation = representation
+        self._matrix = self.__matrix_for_representation(representation)
+        self._matrix.set_vector_vector(dimensions, columns)
 
-    def load_vector_vector(self, columns, dimensions):
-        """Loads the given data and dimensions into this boundary matrix"""
-        return self._matrix.load_vector_vector(columns, dimensions)
+    def load(self, file_name, mode = 'b'):
+        """Load this boundary matrix from a file"""
+        if mode == 'b':
+            return self._matrix.load_binary(file_name)
+        elif mode == 't':
+            return self._matrix.load_ascii(file_name)
 
-    def load_binary(self, file_name):
-        """Load this boundary matrix from a binary file"""
-        return self._matrix.load_binary
-
-    def save_binary(self, file_name):
-        """Save this boundary matrix to a binary file"""
-        return self._matrix.save_binary
-
-    def load_ascii(self, file_name):
-        """Load this boundary matrix from a text file"""
-        return self._matrix.load_ascii
-
-    def save_ascii(self, file_name):
-        """Save this boundary matrix to a text file"""
-        return self._matrix.save_ascii
-
-    def set_col(self, index, column):
-        """Set the column at the given index"""
-        return self._matrix.set_col(index, column)
-
-    def set_dims(self, dimensions):
-        """Set the dimensions for this boundary matrix"""
-        return self._matrix.set_dims(dimensions)
-
-    def set_dim(self, index, dimension):
-        """Sets the dimension at the given index"""
-        return self._matrix.set_dim(index, dimension)
+    def save(self, file_name, mode = 'b'):
+        """Save this boundary matrix to a file"""
+        if mode == 'b':
+            return self._matrix.save_binary(file_name)
+        elif mode == 't':
+            return self._matrix.save_ascii(file_name)
 
     def compute_persistence_pairs(self,
                                 reduction = reductions.twist_reduction):
@@ -205,16 +196,11 @@ def _short_name(name):
 
 def _convert(source, to_representation):
     """Internal - function to convert from one `boundary_matrix` implementation to another"""
-    class_name = source.__class__.__name__
-    source_rep_short_name = class_name[len('boundary_matrix_'):]
+    class_name = source._representation.name
+    source_rep_short_name = _short_name(class_name)
     to_rep_short_name = _short_name(to_representation.name)
     function = getattr(_phat, "convert_%s_to_%s" % (source_rep_short_name, to_rep_short_name))
-    return function(source)
-
-
-
-
-
+    return function(source._matrix)
 
 
 

@@ -8,15 +8,14 @@ if __name__=='__main__':
 
     boundary_matrix = phat.boundary_matrix()
     # This is broken for some reason
-    if not boundary_matrix.load_binary(test_data):
-    # if not boundary_matrix.load_ascii(test_data):
+    if not boundary_matrix.load(test_data):
         print("Error: test data %s not found!" % test_data)
         sys.exit(1)
 
     error = False
 
     def compute_chunked(mat):
-        return phat.compute_persistence_pairs(mat, phat.reductions.chunk_reduction)
+        return mat.compute_persistence_pairs(phat.reductions.chunk_reduction)
 
     print("Comparing representations using Chunk algorithm ...")
     print("Running Chunk - Sparse ...")
@@ -88,7 +87,8 @@ if __name__=='__main__':
 
     reps = phat.representations
     reds = phat.reductions
-    pairs = phat.compute_persistence_pairs
+    def pairs(mat, red):
+        return mat.compute_persistence_pairs(red)
 
     twist_boundary_matrix = bit_tree_mat()
     twist_pairs = pairs(twist_boundary_matrix, reds.twist_reduction)
@@ -132,10 +132,10 @@ if __name__=='__main__':
     print("Comparing primal and dual approach using Chunk - Full ...")
 
     primal_boundary_matrix = phat.boundary_matrix(reps.full_pivot_column, boundary_matrix)
-    primal_pairs = phat.compute_persistence_pairs(primal_boundary_matrix, reds.chunk_reduction)
+    primal_pairs = primal_boundary_matrix.compute_persistence_pairs(reds.chunk_reduction)
 
     dual_boundary_matrix = phat.boundary_matrix(reps.full_pivot_column, boundary_matrix)
-    dual_pairs = phat.compute_persistence_pairs_dualized(dual_boundary_matrix)
+    dual_pairs = dual_boundary_matrix.compute_persistence_pairs_dualized()
 
     if primal_pairs != dual_pairs:
         print("Error: primal and dual differ!", file=sys.stderr)
@@ -149,11 +149,9 @@ if __name__=='__main__':
 
     print("Testing vector<vector> interface ...")
 
-    (vector_vector_matrix, vector_dims) = boundary_matrix.get_vector_vector()
-
     vector_vector_boundary_matrix = phat.boundary_matrix(phat.representations.bit_tree_pivot_column)
 
-    vector_vector_boundary_matrix.load_vector_vector(vector_vector_matrix, vector_dims)
+    vector_vector_boundary_matrix.columns = boundary_matrix.columns
 
     if vector_vector_boundary_matrix != boundary_matrix:
         print("Error: [load|save]_vector_vector bug", file=sys.stderr)
