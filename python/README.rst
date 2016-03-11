@@ -43,7 +43,7 @@ the algorithm. We provide the following choices of representation classes:
 Sample usage
 ------------
 
-We will build an ordered boundary matrix of this simplicial complex consisting of a single triangle: 
+We will build an ordered boundary matrix of this simplicial complex consisting of a single triangle::
 
      3
      |\\

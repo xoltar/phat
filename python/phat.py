@@ -6,7 +6,7 @@ algorithms and column data representations.
 
 Here is a simple example of usage.
 
-We will build an ordered boundary matrix of this simplicial complex consisting of a single triangle: 
+We will build an ordered boundary matrix of this simplicial complex consisting of a single triangle::
 
      3
      |\\
@@ -36,11 +36,15 @@ Now the code::
                                 (1, [0,3]),
                                 (2, [2,4,5])]
 
-    # or equivalently, boundary_matrix = phat.boundary_matrix(representation = ..., columns = ...)
-    # would combine the creation of the matrix and the assignment of the columns
+    # or equivalently,
+    # boundary_matrix = phat.boundary_matrix(representation = ...,
+    #                                        columns = ...)
+    # would combine the creation of the matrix and
+    # the assignment of the columns
 
     # print some information of the boundary matrix:
-    print("\nThe boundary matrix has %d columns:" % len(boundary_matrix.columns))
+    print()
+    print("The boundary matrix has %d columns:" % len(boundary_matrix.columns))
     for col in boundary_matrix.columns:
         s = "Column %d represents a cell of dimension %d." % (col.index, col.dimension)
         if (col.boundary):
@@ -52,9 +56,11 @@ Now the code::
 
     pairs.sort()
 
-    print("\nThere are %d persistence pairs: " % len(pairs))
+    print()
+    print("There are %d persistence pairs: " % len(pairs))
     for pair in pairs:
         print("Birth: %d, Death: %d" % pair)
+
 
 Please see https://bitbucket.org/phat-code/phat/python for more information.
 """
