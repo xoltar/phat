@@ -43,11 +43,8 @@ the algorithm. We provide the following choices of representation classes:
 Sample usage
 ------------
 
-From src/simple_example.py in the source::
+We will build an ordered boundary matrix of this simplicial complex consisting of a single triangle: 
 
-    print("""
-    we will build an ordered boundary matrix of this simplicial complex consisting of a single triangle: 
-    
      3
      |\\
      | \\
@@ -60,45 +57,41 @@ From src/simple_example.py in the source::
      |________\\
      0    2    1
 
-     """)
+Now the code::
 
     import phat
-
-    # set the dimension of the cell that each column represents:
-    dimensions = [0, 0, 1, 0, 1, 1, 2]
 
     # define a boundary matrix with the chosen internal representation
     boundary_matrix = phat.boundary_matrix(representation = phat.representations.vector_vector)
 
-    # set the respective columns -- the columns entries have to be sorted
-    boundary_matrix.set_dims(dimensions)
-    boundary_matrix.set_col(0, [])
-    boundary_matrix.set_col(1, [])
-    boundary_matrix.set_col(2, [0,1])
-    boundary_matrix.set_col(3, [])
-    boundary_matrix.set_col(4, [1,3])
-    boundary_matrix.set_col(5, [0,3])
-    boundary_matrix.set_col(6, [2,4,5])
+    # set the respective columns -- (dimension, boundary) pairs
+    boundary_matrix.columns = [ (0, []),
+                                (0, []),
+                                (1, [0,1]),
+                                (0, []),
+                                (1, [1,3]),
+                                (1, [0,3]),
+                                (2, [2,4,5])]
+
+    # or equivalently, boundary_matrix = phat.boundary_matrix(representation = ..., columns = ...)
+    # would combine the creation of the matrix and the assignment of the columns
 
     # print some information of the boundary matrix:
-    print()
-    print("the boundary matrix has %d columns:" % boundary_matrix.get_num_cols())
-    for col_idx in range(boundary_matrix.get_num_cols()):
-        s = "column %d represents a cell of dimension %d." % (col_idx, boundary_matrix.get_dim(col_idx))
-        if (not boundary_matrix.is_empty(col_idx)):
-            s = s + " its boundary consists of the cells " + " ".join([str(c) for c in boundary_matrix.get_col(col_idx)])
+    print("\nThe boundary matrix has %d columns:" % len(boundary_matrix.columns))
+    for col in boundary_matrix.columns:
+        s = "Column %d represents a cell of dimension %d." % (col.index, col.dimension)
+        if (col.boundary):
+            s = s + " Its boundary consists of the cells " + " ".join([str(c) for c in col.boundary])
         print(s)
-    print("overall, the boundary matrix has %d entries." % boundary_matrix.get_num_entries())
+    print("Overall, the boundary matrix has %d entries." % len(boundary_matrix))
 
-    pairs = phat.compute_persistence_pairs(boundary_matrix)
+    pairs = boundary_matrix.compute_persistence_pairs()
 
     pairs.sort()
 
-    print()
-
-    print("there are %d persistence pairs: " % len(pairs))
+    print("\nThere are %d persistence pairs: " % len(pairs))
     for pair in pairs:
-        print("birth: %d, death: %d" % pair)
+        print("Birth: %d, Death: %d" % pair)
 
 References:
 
