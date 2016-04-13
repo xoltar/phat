@@ -188,7 +188,7 @@ class boundary_matrix:
     @property
     def dimensions(self):
         """A collection of dimensions, equivalent to [c.dimension for c in self.columns]"""
-        return [self.get_dim(i) for i in range(self._matrix.get_num_cols())]
+        return [self._matrix.get_dim(i) for i in range(self._matrix.get_num_cols())]
 
     @dimensions.setter
     def dimensions(self, dimensions):
