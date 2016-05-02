@@ -58,8 +58,15 @@ python setup.py install
 This will install PHAT for whatever Python installation your `python` executable is associated with.
 Please ensure you use the `pip` that comes from the same directory where your `python` executable lives!
 
-Currently, the PHAT Python bindings are known to work on Linux with Python 2.7 and Python 3.5.
-Other configurations are untested but in progress.
+Currently, the PHAT Python bindings are known to work on:
+
+* Linux with Python 2.7 (tested on Ubuntu 14.04 with system Python)
+* Linux with Python 3.5 (tested on Ubuntu 14.04 with Anaconda)
+* Mac OS X with Python 2.7 (tested on El Capitan with Anaconda)
+* Mac OS X with Python 3.5 (tested on El Capitan with Anaconda)
+
+Other configurations are untested.
+
 Please let us know if there is a platform you'd like us to support, we will do so if we can.
 
 Sample usage
