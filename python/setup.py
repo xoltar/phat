@@ -2,6 +2,7 @@ from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 import sys
 import os.path
+
 ext_modules = [
     Extension(
         '_phat',
@@ -14,7 +15,7 @@ ext_modules = [
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(os.path.join(here, 'README.rst')) as f:
     long_description = f.read()
 
 class BuildExt(build_ext):

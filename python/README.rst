@@ -40,6 +40,24 @@ the algorithm. We provide the following choices of representation classes:
 * ``full_pivot_column``: The same idea as in the sparse version. However, instead of a ``std::set``, the pivot column is expanded into a bit vector of size n (the dimension of the matrix). To avoid costly initializations, the class remembers which entries have been manipulated for a pivot column and updates only those entries when another column becomes the pivot.
 * ``bit_tree_pivot_column`` (default representation): Similar to the ``full_pivot_column`` but the implementation is more efficient. Internally it is a bit-set with fast iteration over nonzero elements, and fast access to the maximal element. 
 
+Installation
+------------
+
+Suppose you have checked out the PHAT repository at location $PHAT. Then you can:
+
+```
+cd $PHAT/python
+
+pip install .
+```
+
+This will install PHAT for whatever Python installation your `pip` executable is associated with.
+Also note that this will install dependencies (pybind11) as well. 
+If you already have pybind11 installed, then `python setup.py install` will most likely work too.
+
+Currently, the PHAT Python bindings are known to work on Mac OS X with Python 3.5. Other configurations are untested but in progress.
+Please let us know if there is a platform you'd like us to support, we will do so if we can.
+
 Sample usage
 ------------
 
