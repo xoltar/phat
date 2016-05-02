@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import phat
 
@@ -156,7 +157,6 @@ if __name__=='__main__':
     if vector_vector_boundary_matrix != boundary_matrix:
         print("Error: [load|save]_vector_vector bug", file=sys.stderr)
         error = True
-
 
     if error:
         sys.exit(1)

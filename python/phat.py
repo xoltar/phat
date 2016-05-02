@@ -77,6 +77,7 @@ __all__ = ['boundary_matrix',
            'representations',
            'reductions']
 
+
 class representations(enum.Enum):
     """Available representations for internal storage of columns in
     a `boundary_matrix`
@@ -89,6 +90,7 @@ class representations(enum.Enum):
     vector_set = 6
     vector_list = 7
 
+
 class reductions(enum.Enum):
     """Available reduction algorithms"""
     twist_reduction = 1
@@ -97,7 +99,8 @@ class reductions(enum.Enum):
     row_reduction = 4
     spectral_sequence_reduction = 5
 
-class column:
+
+class column(object):
     """A view on one column of data in a boundary matrix"""
     def __init__(self, matrix, index):
         """INTERNAL. Columns are created automatically by boundary matrices.
@@ -128,7 +131,10 @@ class column:
     def boundary(self, values):
         return self._matrix._matrix.set_col(self._index, values)
 
-class boundary_matrix:
+    def __str__(self):
+        return "(%d, %s)" % (self.dimension, self.boundary)
+
+class boundary_matrix(object):
     """Boundary matrices that store the shape information of a cell complex.
     """
 
@@ -200,6 +206,11 @@ class boundary_matrix:
 
     def __eq__(self, other):
         return self._matrix == other._matrix
+
+    #Note Python 2.7 needs BOTH __eq__ and __ne__ otherwise you get things that
+    #are both equal and not equal
+    def __ne__(self, other):
+        return self._matrix != other._matrix
 
     def __len__(self):
         return self._matrix.get_num_entries()

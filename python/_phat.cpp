@@ -149,6 +149,16 @@ void wrap_boundary_matrix(py::module &mod, const std::string &representation_suf
     .def("__eq__", &mat::template operator==<phat::vector_set>)
     .def("__eq__", &mat::template operator==<phat::vector_list>)
 
+    //Python 3.x can figure this out for itself, but Python 2.7 needs to be told:
+    .def("__ne__", &mat::template operator!=<phat::bit_tree_pivot_column>)
+    .def("__ne__", &mat::template operator!=<phat::sparse_pivot_column>)
+    .def("__ne__", &mat::template operator!=<phat::heap_pivot_column>)
+    .def("__ne__", &mat::template operator!=<phat::full_pivot_column>)
+    .def("__ne__", &mat::template operator!=<phat::vector_vector>)
+    .def("__ne__", &mat::template operator!=<phat::vector_heap>)
+    .def("__ne__", &mat::template operator!=<phat::vector_set>)
+    .def("__ne__", &mat::template operator!=<phat::vector_list>)
+
     //#### Data access
 
     // In `get_col`, since Python is garbage collected, the C++ idiom of passing in a collection
@@ -241,6 +251,9 @@ void wrap_persistence_pairs(py::module &m) {
     .def("clear", &phat::persistence_pairs::clear, "Empties the collection")
     .def("sort", &phat::persistence_pairs::sort, "Sort in place")
     .def("__eq__", &phat::persistence_pairs::operator==)
+    .def("__ne__", [](phat::persistence_pairs &p, phat::persistence_pairs &other) {
+        return p != other;
+      })
     //#### File operations
     .def("load_ascii", &phat::persistence_pairs::load_ascii,
          "Load the contents of a text file into this instance")
