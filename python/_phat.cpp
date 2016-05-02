@@ -227,7 +227,7 @@ void wrap_persistence_pairs(py::module &m) {
     .def("__len__", &phat::persistence_pairs::get_num_pairs)
     // Unlike set_pair, this takes a Python 2-tuple
     .def("__setitem__",
-         [](phat::persistence_pairs &p, int index, std::pair<phat::index,phat::index> &pair) {
+         [](phat::persistence_pairs &p, int index, std::pair<phat::index,phat::index> pair) {
            phat::index idx = fix_index(p, index);
            p.set_pair(idx, pair.first, pair.second);
          })

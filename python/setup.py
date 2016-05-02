@@ -2,12 +2,14 @@ from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 import sys
 import os.path
+from io import open
 
 ext_modules = [
     Extension(
         '_phat',
         ['_phat.cpp'],
-        include_dirs=['include', '../include'],
+        include_dirs=['include', 
+                      '../include'],
         language='c++',
     ),
 ]
@@ -15,7 +17,7 @@ ext_modules = [
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with open(os.path.join(here, 'README.rst')) as f:
+with open(os.path.join(here, 'README.rst'), encoding = 'utf8') as f:
     long_description = f.read()
 
 class BuildExt(build_ext):
@@ -31,8 +33,10 @@ class BuildExt(build_ext):
     def build_extensions(self):
         ct = self.compiler.compiler_type
         opts = self.c_opts.get(ct, [])
+        import pybind11
         for ext in self.extensions:
             ext.extra_compile_args = opts
+            ext.include_dirs.append(pybind11.get_include())
         build_ext.build_extensions(self)
 
 setup(
