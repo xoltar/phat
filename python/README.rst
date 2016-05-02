@@ -43,7 +43,7 @@ the algorithm. We provide the following choices of representation classes:
 Installation
 ------------
 
-Suppose you have checked out the PHAT repository at location $PHAT. Then you can:
+Suppose you have checked out the PHAT repository at location $PHAT. Then you can::
 
 	cd $PHAT/python
 
