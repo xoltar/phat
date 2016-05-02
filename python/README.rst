@@ -45,18 +45,16 @@ Installation
 
 Suppose you have checked out the PHAT repository at location $PHAT. Then you can:
 
-```
-cd $PHAT/python
+	cd $PHAT/python
 
-ln -s ../include include  # (or copy, we just need $PHAT/include to be in the current folder as well)
+	ln -s ../include include  # (or copy, we just need $PHAT/include to be in the current folder as well)
 
-pip install pybind11
+	pip install pybind11
 
-python setup.py install
-```
+	python setup.py install
 
-This will install PHAT for whatever Python installation your `python` executable is associated with.
-Please ensure you use the `pip` that comes from the same directory where your `python` executable lives!
+This will install PHAT for whatever Python installation your ``python`` executable is associated with.
+Please ensure you use the ``pip`` that comes from the same directory where your ``python`` executable lives!
 
 Currently, the PHAT Python bindings are known to work on:
 
