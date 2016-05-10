@@ -4,6 +4,11 @@ import sys
 import os.path
 from io import open
 
+if sys.version_info < (2, 7, 11):
+    print("Sorry, PHAT requires Python 2.7.11 or later")
+    sys.exit(1)
+
+
 ext_modules = [
     Extension(
         '_phat',
