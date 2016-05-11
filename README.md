@@ -10,7 +10,7 @@ Ulrich Bauer, Michael Kerber, Jan Reininghaus
 Hubert Wagner
 
 ## Downloads: ##
-* [PHAT, v1.4.0](https://drive.google.com/uc?id=0B7Yz6TPEpiGEWmNyeVFsNXgtUGc&export=download)
+* [PHAT, v1.4.1](https://bitbucket.org/phat-code/phat/get/v1.4.1.zip)
 * [PHAT, v1.3.0](https://drive.google.com/uc?id=0B7Yz6TPEpiGEMGFNQ3FPX3ltelk&export=download)
 * [PHAT, v1.2.1](https://drive.google.com/uc?id=0B7Yz6TPEpiGENE9KUnhUSFdFQUk&export=download)
 * [benchmark data](https://drive.google.com/uc?id=0B7Yz6TPEpiGERGZFbjlXaUt1ZWM&export=download)
