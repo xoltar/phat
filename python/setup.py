@@ -42,6 +42,7 @@ class BuildExt(build_ext):
         for ext in self.extensions:
             ext.extra_compile_args = opts
             ext.include_dirs.append(pybind11.get_include())
+            ext.include_dirs.append(pybind11.get_include(user=True))
         build_ext.build_extensions(self)
 
 setup(
