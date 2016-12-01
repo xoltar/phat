@@ -4,17 +4,16 @@ import sys
 import os.path
 from io import open
 
-if sys.version_info < (2, 7, 11):
-    print("Sorry, PHAT requires Python 2.7.11 or later")
+if sys.version_info < (2, 7, 12):
+    print("Sorry, PHAT requires Python 2.7.12 or later")
     sys.exit(1)
 
 
 ext_modules = [
     Extension(
         '_phat',
-        ['_phat.cpp'],
-        include_dirs=['include', 
-                      '../include'],
+        ['python/_phat.cpp'],
+        include_dirs=['include'],
         language='c++',
     ),
 ]
@@ -22,7 +21,7 @@ ext_modules = [
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with open(os.path.join(here, 'README.rst'), encoding = 'utf8') as f:
+with open(os.path.join(here, 'python', 'README.rst'), encoding = 'utf8') as f:
     long_description = f.read()
 
 class BuildExt(build_ext):
@@ -45,6 +44,11 @@ class BuildExt(build_ext):
             ext.include_dirs.append(pybind11.get_include(user=True))
         build_ext.build_extensions(self)
 
+requires = ['pybind11']
+
+if sys.version_info < (3,4,0):
+    requires.append('enum34')
+
 setup(
     name='phat',
     version='0.0.1',
@@ -56,8 +60,9 @@ setup(
     keywords='algebraic-topology PHAT distributed topology persistent-homology',
     long_description=long_description,
     ext_modules=ext_modules,
-    install_requires=['pybind11'],
+    install_requires=requires,
     cmdclass={'build_ext': BuildExt},
+    package_dir={'':'python'},
     py_modules = ['phat'],
     # packages = find_packages(exclude = ['doc', 'test'])
  )

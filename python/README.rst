@@ -45,25 +45,30 @@ Installation
 
 Suppose you have checked out the PHAT repository at location $PHAT. Then you can::
 
-	cd $PHAT/python
+	cd $PHAT
 
-	ln -s ../include include  # (or copy, we just need $PHAT/include to be in the current folder as well)
+    pip install .
 
-	pip install pybind11
-
-	python setup.py install
-
-This will install PHAT for whatever Python installation your ``python`` executable is associated with.
+This will install PHAT for whatever Python installation your ``pip`` executable is associated with.
 Please ensure you use the ``pip`` that comes from the same directory where your ``python`` executable lives!
 
 Currently, the PHAT Python bindings are known to work on:
 
 * Linux with Python 2.7 (tested on Ubuntu 14.04 with system Python)
 * Linux with Python 3.5 (tested on Ubuntu 14.04 with Anaconda)
-* Mac OS X with Python 2.7 (tested on El Capitan with Anaconda)
-* Mac OS X with Python 3.5 (tested on El Capitan with Anaconda)
+* Mac OS X with Python 2.7.12 (tested on Sierra with homebrew)
+* Mac OS X with Python 3.5 (tested on Sierra with homebrew)
 
 Other configurations are untested.
+
+Please note that this package DOES NOT work with the Python 2.7.10 that ships with the operating
+system in Mac OS X. These words of wisdom from `python.org`_ are worth heeding:
+
+    The version of Python that ships with OS X is great for learning but it’s not good for development.
+    The version shipped with OS X may be out of date from the official current Python release,
+    which is considered the stable production version.
+
+We recommend installing Python on Mac OS X using either homebrew or Anaconda, according to your taste.
 
 Please let us know if there is a platform you'd like us to support, we will do so if we can.
 
@@ -128,3 +133,4 @@ References:
 .. [4] U.Bauer, M.Kerber, J.Reininghaus: Clear and Compress: Computing Persistent Homology in Chunks. arXiv:1303.0477_
 .. _arXiv:1303.0477: http://arxiv.org/pdf/1303.0477.pdf
 .. _`Persistent Homology Algorithm Toolkit`: https://bitbucket.org/phat/phat-code
+.. _`python.org`:http://docs.python-guide.org/en/latest/starting/install/osx/
