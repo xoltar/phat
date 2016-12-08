@@ -133,6 +133,10 @@ Supported Platforms:
 * Visual Studio 2008 and 2012 (2010 untested)
 * GCC version 4.4. and higher
 
+## Python Bindings ##
+We provide bindings for Python 3.x and 2.7.12+, which are installable using `pip`. Please see
+the Python-specific README.rst in the `python` folder of this repository for details.
+
 References:
 
 1. H.Edelsbrunner, J.Harer: Computational Topology, An Introduction. American Mathematical Society, 2010, ISBN 0-8218-4925-5
