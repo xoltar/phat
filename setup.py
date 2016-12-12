@@ -51,11 +51,11 @@ if sys.version_info < (3,4,0):
 
 setup(
     name='phat',
-    version='0.0.1',
+    version='1.5.0',
     author='Bryn Keller',
     author_email='bryn.keller@intel.com',
     url='https://bitbucket.org/phat-code/phat',
-    description='Python bindings for PHAT',
+    description='Python bindings for PHAT, the C++ based Persistent Homology Algorithm Toolbox',
     license = 'LGPL',
     keywords='algebraic-topology PHAT distributed topology persistent-homology',
     long_description=long_description,

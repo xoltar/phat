@@ -43,6 +43,12 @@ the algorithm. We provide the following choices of representation classes:
 Installation
 ------------
 
+If you wish to use the released version of PHAT, you can simply install from PyPI::
+
+    pip install phat
+
+Installation from Source
+------------------------
 Suppose you have checked out the PHAT repository at location $PHAT. Then you can::
 
 	cd $PHAT
