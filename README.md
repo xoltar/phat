@@ -1,15 +1,15 @@
 # PHAT (Persistent Homology Algorithm Toolbox), v1.5.0 #
 Copyright 2013, 2014 IST Austria
 
-## Project Founders: ##
+## Project Founders ##
 
 Ulrich Bauer, Michael Kerber, Jan Reininghaus
 
-## Contributors: ##
+## Contributors ##
 
 Hubert Wagner, Bryn Keller
 
-## Downloads: ##
+## Downloads ##
 * [PHAT, v1.5.0](https://bitbucket.org/phat-code/phat/get/v1.5.0.zip)
 * [PHAT, v1.4.1](https://bitbucket.org/phat-code/phat/get/v1.4.1.zip)
 * [PHAT, v1.3.0](https://drive.google.com/uc?id=0B7Yz6TPEpiGEMGFNQ3FPX3ltelk&export=download)
@@ -17,7 +17,7 @@ Hubert Wagner, Bryn Keller
 * [benchmark data](https://drive.google.com/uc?id=0B7Yz6TPEpiGERGZFbjlXaUt1ZWM&export=download)
 * [benchmark data 2](https://drive.google.com/uc?id=0B7Yz6TPEpiGEWE55X3RuM3JjZ3M&export=download)
 
-## Description: ##
+## Description ##
 
 This software library contains methods for computing the persistence pairs of a 
 filtered cell complex represented by an ordered boundary matrix with Z<sub>2</sub> coefficients. 
@@ -96,7 +96,7 @@ pairs.get_pair(...)
  	
 A simple example that demonstrates this functionality can be found in `src/simple_example.cpp`
 
-## File Formats: ##
+## File Formats ##
 
 The library supports input and output in ascii and binary format
 through the methods `[load|save]_[ascii|binary]` in the classes `boundary_matrix` 
@@ -138,9 +138,10 @@ Supported Platforms:
 We provide bindings for Python 3.x and 2.7.12+, which are installable using `pip`. Please see
 the Python-specific README.rst in the `python` folder of this repository for details.
 
-References:
+## References ##
 
 1. H.Edelsbrunner, J.Harer: Computational Topology, An Introduction. American Mathematical Society, 2010, ISBN 0-8218-4925-5
 2. V.de Silva, D.Morozov, M.Vejdemo-Johansson: Dualities in persistent (co)homology. Inverse Problems 27, 2011
 3. C.Chen, M.Kerber: Persistent Homology Computation With a Twist. 27th European Workshop on Computational Geometry, 2011.
-4. U.Bauer, M.Kerber, J.Reininghaus: Clear and Compress: Computing Persistent Homology in Chunks. [http://arxiv.org/pdf/1303.0477.pdf arXiv:1303.0477]
+4. U.Bauer, M.Kerber, J.Reininghaus: Clear and Compress: Computing Persistent Homology in Chunks. [http://arxiv.org/pdf/1303.0477.pdf](arXiv:1303.0477)
+5. U.Bauer, M.Kerber, J.Reininghausc, H.Wagner: Phat – Persistent Homology Algorithms Toolbox. Journal of Symbolic Computation 78, 2017, p. 76–90.
