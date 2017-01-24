@@ -1,0 +1,13 @@
+GPATH
+GRTAGS
+GTAGS
+CMakeCache.txt
+self_test
+simple_example
+phat
+info
+convert
+cmake_install.cmake
+benchmark
+Makefile
+CMakeFiles
