@@ -1,5 +1,5 @@
-# PHAT (Persistent Homology Algorithm Toolbox), v1.5.0 #
-Copyright 2013, 2014 IST Austria
+# PHAT (Persistent Homology Algorithm Toolbox), v1.5 #
+Copyright 2013–2017 IST Austria
 
 ## Project Founders ##
 
@@ -10,9 +10,9 @@ Ulrich Bauer, Michael Kerber, Jan Reininghaus
 Hubert Wagner, Bryn Keller
 
 ## Downloads ##
-* [PHAT, v1.5.0](https://bitbucket.org/phat-code/phat/get/v1.5.0.zip)
+* [PHAT, v1.5](https://bitbucket.org/phat-code/phat/get/v1.5.zip)
 * [PHAT, v1.4.1](https://bitbucket.org/phat-code/phat/get/v1.4.1.zip)
-* [PHAT, v1.3.0](https://drive.google.com/uc?id=0B7Yz6TPEpiGEMGFNQ3FPX3ltelk&export=download)
+* [PHAT, v1.3](https://drive.google.com/uc?id=0B7Yz6TPEpiGEMGFNQ3FPX3ltelk&export=download)
 * [PHAT, v1.2.1](https://drive.google.com/uc?id=0B7Yz6TPEpiGENE9KUnhUSFdFQUk&export=download)
 * [benchmark data](https://drive.google.com/uc?id=0B7Yz6TPEpiGERGZFbjlXaUt1ZWM&export=download)
 * [benchmark data 2](https://drive.google.com/uc?id=0B7Yz6TPEpiGEWE55X3RuM3JjZ3M&export=download)
