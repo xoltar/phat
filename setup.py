@@ -51,7 +51,7 @@ if sys.version_info < (3,4,0):
 
 setup(
     name='phat',
-    version='1.5.0',
+    version='1.5.0.post2',
     author='Bryn Keller',
     author_email='bryn.keller@intel.com',
     url='https://bitbucket.org/phat-code/phat',
@@ -60,6 +60,7 @@ setup(
     keywords='algebraic-topology PHAT distributed topology persistent-homology',
     long_description=long_description,
     ext_modules=ext_modules,
+    requires=requires,
     install_requires=requires,
     cmdclass={'build_ext': BuildExt},
     package_dir={'':'python'},

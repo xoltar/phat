@@ -99,8 +99,10 @@ Now the code::
 
     import phat
 
-    # define a boundary matrix with the chosen internal representation
-    boundary_matrix = phat.boundary_matrix(representation = phat.representations.vector_vector)
+    boundary_matrix = phat.boundary_matrix()
+
+    # or define a boundary matrix with the chosen internal representation
+    # boundary_matrix = phat.boundary_matrix(representation = phat.representations.bit_tree_pivot_column)
 
     # set the respective columns -- (dimension, boundary) pairs
     boundary_matrix.columns = [ (0, []),
