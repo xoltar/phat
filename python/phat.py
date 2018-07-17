@@ -70,7 +70,7 @@ import enum
 
 from _phat import persistence_pairs
 
-#The public API for the module
+# The public API for the module
 
 __all__ = ['boundary_matrix',
            'persistence_pairs',
@@ -102,6 +102,7 @@ class reductions(enum.Enum):
 
 class column(object):
     """A view on one column of data in a boundary matrix"""
+
     def __init__(self, matrix, index):
         """INTERNAL. Columns are created automatically by boundary matrices.
         There is no need to construct them directly"""
@@ -120,7 +121,7 @@ class column(object):
 
     @dimension.setter
     def dimension(self, value):
-        return self._matrix._matrix.set_dim(self._index, value)
+        self._matrix._matrix.set_dim(self._index, value)
 
     @property
     def boundary(self):
@@ -129,16 +130,17 @@ class column(object):
 
     @boundary.setter
     def boundary(self, values):
-        return self._matrix._matrix.set_col(self._index, values)
+        self._matrix._matrix.set_col(self._index, values)
 
     def __str__(self):
         return "(%d, %s)" % (self.dimension, self.boundary)
+
 
 class boundary_matrix(object):
     """Boundary matrices that store the shape information of a cell complex.
     """
 
-    def __init__(self, representation = representations.bit_tree_pivot_column, source = None, columns = None):
+    def __init__(self, representation=representations.bit_tree_pivot_column, source=None, columns=None):
         """
         The boundary matrix will use the specified implementation for storing its
         column data. If the `source` parameter is specified, it will be assumed to
@@ -178,8 +180,8 @@ class boundary_matrix(object):
     @columns.setter
     def columns(self, columns):
         for col in columns:
-           if not (isinstance(col, column) or isinstance(col, tuple)):
-               raise TypeError("All columns must be column objects, or (dimension, values) tuples")
+            if not (isinstance(col, column) or isinstance(col, tuple)):
+                raise TypeError("All columns must be column objects, or (dimension, values) tuples")
         if len(columns) != len(self.dimensions):
             self._matrix.set_dims([0] * len(columns))
         for i, col in enumerate(columns):
@@ -189,7 +191,7 @@ class boundary_matrix(object):
             else:
                 dimension, values = col
                 self._matrix.set_dim(i, dimension)
-                self._matrix.set_col(i, values)
+                self._matrix.set_col(i, sorted(values))
 
     @property
     def dimensions(self):
@@ -198,7 +200,7 @@ class boundary_matrix(object):
 
     @dimensions.setter
     def dimensions(self, dimensions):
-        return self._matrix.set_dims(dimensions)
+        self._matrix.set_dims(dimensions)
 
     def __matrix_for_representation(self, representation):
         short_name = _short_name(representation.name)
@@ -207,27 +209,27 @@ class boundary_matrix(object):
     def __eq__(self, other):
         return self._matrix == other._matrix
 
-    #Note Python 2.7 needs BOTH __eq__ and __ne__ otherwise you get things that
-    #are both equal and not equal
+    # Note Python 2.7 needs BOTH __eq__ and __ne__ otherwise you get things that
+    # are both equal and not equal
     def __ne__(self, other):
         return self._matrix != other._matrix
 
     def __len__(self):
         return self._matrix.get_num_entries()
 
-    #Pickle support
+    # Pickle support
     def __getstate__(self):
         (dimensions, columns) = self._matrix.get_vector_vector()
         return (self._representation, dimensions, columns)
 
-    #Pickle support
+    # Pickle support
     def __setstate__(self, state):
         presentation, dimensions, columns = state
         self._representation = representation
         self._matrix = self.__matrix_for_representation(representation)
         self._matrix.set_vector_vector(dimensions, columns)
 
-    def load(self, file_name, mode = 'b'):
+    def load(self, file_name, mode='b'):
         """Load this boundary matrix from a file
 
         Parameters
@@ -252,7 +254,7 @@ class boundary_matrix(object):
         else:
             raise ValueError("Only 'b' - binary and 't' - text modes are supported")
 
-    def save(self, file_name, mode = 'b'):
+    def save(self, file_name, mode='b'):
         """Save this boundary matrix to a file
 
         Parameters
@@ -278,36 +280,39 @@ class boundary_matrix(object):
             raise ValueError("Only 'b' - binary and 't' - text modes are supported")
 
     def compute_persistence_pairs(self,
-                                reduction = reductions.twist_reduction):
+                                  reduction=reductions.twist_reduction):
         """Computes persistence pairs (birth, death) for the given boundary matrix."""
         representation_short_name = _short_name(self._representation.name)
         algo_name = reduction.name
         algo_short_name = _short_name(algo_name)
-        #Look up an implementation that matches the requested characteristics
-        #in the _phat module
+        # Look up an implementation that matches the requested characteristics
+        # in the _phat module
         function = getattr(_phat, "compute_persistence_pairs_" + representation_short_name + "_" + algo_short_name)
         return function(self._matrix)
 
-    def compute_persistence_pairs_dualized(self, 
-                                        reduction = reductions.twist_reduction):
+    def compute_persistence_pairs_dualized(self,
+                                           reduction=reductions.twist_reduction):
         """Computes persistence pairs (birth, death) from the dualized form of the given boundary matrix."""
         representation_short_name = _short_name(self._representation.name)
         algo_name = reduction.name
         algo_short_name = _short_name(algo_name)
-        #Look up an implementation that matches the requested characteristics
-        #in the _phat module
-        function = getattr(_phat, "compute_persistence_pairs_dualized_" + representation_short_name + "_" + algo_short_name)
+        # Look up an implementation that matches the requested characteristics
+        # in the _phat module
+        function = getattr(_phat,
+                           "compute_persistence_pairs_dualized_" + representation_short_name + "_" + algo_short_name)
         return function(self._matrix)
 
     def convert(self, representation):
         """Copy this matrix to another with a different representation"""
         return boundary_matrix(representation, self)
 
+
 def _short_name(name):
     """An internal API that takes leading characters from words
     For instance, 'bit_tree_pivot_column' becomes 'btpc'
     """
     return "".join([n[0] for n in name.split("_")])
+
 
 def _convert(source, to_representation):
     """Internal - function to convert from one `boundary_matrix` implementation to another"""
@@ -316,6 +321,3 @@ def _convert(source, to_representation):
     to_rep_short_name = _short_name(to_representation.name)
     function = getattr(_phat, "convert_%s_to_%s" % (source_rep_short_name, to_rep_short_name))
     return function(source._matrix)
-
-
-
